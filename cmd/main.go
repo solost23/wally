@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"wally/global"
 	"wally/global/initialize"
 	"wally/task/register"
 )
@@ -33,7 +34,7 @@ func main() {
 	}
 	initialize.Initialize(WebConfigPath)
 	// 初始化对象
-	t := cron.New()
+	t := cron.New(cron.WithSeconds(), cron.WithLocation(global.Loc))
 	// 注册任务
 	err := register.RegisterTasks(t)
 	if err != nil {
