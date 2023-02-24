@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 	"wally/global/initialize"
+	"wally/task/register"
 )
 
 var (
@@ -33,15 +34,12 @@ func main() {
 	initialize.Initialize(WebConfigPath)
 	// 初始化对象
 	t := cron.New()
-
-	// 注册任务(分离)
-	_, err := t.AddFunc("@every 1s", func() {
-		fmt.Println("hello")
-	})
+	// 注册任务
+	err := register.RegisterTasks(t)
 	if err != nil {
-		panic(err)
+		fmt.Println("Register task failed!, err: ", err.Error())
+		return
 	}
-
 	// 开启定时任务
 	t.Start()
 
